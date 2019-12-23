@@ -1,7 +1,0 @@
-{
-  "navigationBarTitleText": "商户后台",
-  "usingComponents": {
-    "uni-icon": "/components/uni-icons/uni-icons",
-    "wuc-tab": "/components/wuc-tab/wuc-tab"
-  }
-}

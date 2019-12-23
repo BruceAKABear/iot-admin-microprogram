@@ -1,8 +1,0 @@
-{
-  "navigationBarTitleText": "管理后台登录",
-  "usingComponents": {
-    "wuc-tab": "/components/wuc-tab/wuc-tab",
-    "join-us": "/components/join-us/join-us",
-    "uni-icon": "/components/uni-icons/uni-icons"
-  }
-}
