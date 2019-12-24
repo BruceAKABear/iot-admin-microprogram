@@ -21,11 +21,11 @@
 					<swiper-item>
 						<view class="login-use-usernamepassword">
 							<view class="login-use-usernamepassword-username">
-								<uni-icon type="phone" size="40" class=""></uni-icon>
+								<uni-icon type="phone" size="30" class=""></uni-icon>
 								<input type="number" v-model="username" value="" placeholder="请输入您的手机号" />
 							</view>
 							<view class="login-use-usernamepassword-password">
-								<uni-icon type="locked" size="40"></uni-icon>
+								<uni-icon type="locked" size="30"></uni-icon>
 								<input type="password" v-model="password" placeholder="请输入您的密码" />
 							</view>
 							<view class="login-use-usernamepassword-button">
@@ -37,15 +37,15 @@
 						<view class="login-use-phonenumber">
 							<view class="login-use-phonenumber-phonenumber">
 								<uni-icon type="phone" size="40"></uni-icon>
-								<input type="number" v-model="phoneUmber" value="" placeholder="请输入您的手机号" />
-								<button size="mini" type="primary" @tap="getValidCode">获取验证码</button>
+								<input type="number" v-model="phoneNumber" value="" placeholder="请输入您的手机号" />
+								<button size="mini" type="primary" @tap="getValidCode" :disabled="!canGetValidCode">获取验证码</button>
 							</view>
 							<view class="login-use-phonenumber-validcode">
 								<uni-icon type="locked" size="40"></uni-icon>
-								<input type="number" v-model="validcode" placeholder="请输入您的密码" />
+								<input type="number" v-model="validcode" placeholder="请输入验证码" />
 							</view>
 							<view class="login-use-phonenumber-button">
-								<button type="primary" @tap="doUsernamePasswordLogin">登录</button>
+								<button class="button-hover" @tap="doPhoneValidCodeLogin">登录</button>
 							</view>
 
 						</view>
@@ -81,8 +81,16 @@
 				}],
 				username: '',
 				password: '',
-				phoneUmber: '',
-				validcode: ''
+				phoneNumber: '',
+				//验证码
+				validcode: '',
+				//获取到的验证码
+				validcodeGeted: '123456',
+				//是否可以获取验证码标识
+				canGetValidCode: true,
+				//重新获取验证码timmerid
+				resetCanGetValidCodeTimoutId: null,
+
 			}
 		},
 		components: {
@@ -111,6 +119,52 @@
 				} else {
 
 
+				}
+			},
+			//获取验证码方法
+			getValidCode() {
+				//校验手机号输入及格式正确
+				if (this.phoneNumber != '' && (/^1[3456789]\d{9}$/.test(this.phoneNumber))) {
+					this.canGetValidCode = false
+					this.resetCanGetValidCode()
+					uni.showToast({
+						title: '验证码已发送',
+						mask: true,
+						duration: 1500
+					});
+				} else {
+					uni.showToast({
+						title: '手机号不正确',
+						icon:'none',
+						mask: true,
+						duration: 1500
+					});
+				}
+
+			},
+			resetCanGetValidCode() {
+				var that = this
+				that.resetCanGetValidCodeTimoutId = setTimeout(function() {
+					that.canGetValidCode = true
+				}, 90000)
+			},
+			doPhoneValidCodeLogin() {
+				if (this.phoneNumber != '' && (/^1[3456789]\d{9}$/.test(this.phoneNumber)) && this.validcode != '' && this.validcodeGeted ===
+					this.validcode) {
+					//请求手机验证码
+					if (this.validcode === '123456') {
+						//清除timeout
+						clearTimeout(this.resetCanGetValidCodeTimoutId)
+						uni.reLaunch({
+							url: '../index/index'
+						})
+					}
+				} else {
+					uni.showToast({
+						title: '手机号或验证码错误',
+						mask: true,
+						duration: 1500
+					});
 				}
 			}
 		}

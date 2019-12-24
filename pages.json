@@ -1,27 +1,66 @@
 {
-	"pages": [ //pages数组中第一项表示应用启动页，参考：https://uniapp.dcloud.io/collocation/pages
-		{
-			"path": "pages/index/index",
-			"style": {
-				"navigationBarTitleText": "商户后台"
-			}
-		}, {
-			"path": "pages/login/login",
-			"style": {
-				"navigationBarTitleText": "管理后台登录"
-			}
+	"pages": [{
+		"path": "pages/index/index",
+		"style": {
+			"navigationBarTitleText": "商户后台",
+			// 开启下拉刷新
+			"enablePullDownRefresh": true
 		}
-
-
-		, {
-			"path": "pages/devicemanage/devicemanage",
-			"style": {}
+	}, {
+		"path": "pages/login/login",
+		"style": {
+			"navigationBarTitleText": "管理后台登录"
 		}
-	],
+	}, {
+		"path": "pages/devicemanage/devicemanage",
+		"style": {}
+	}, {
+		"path": "pages/tongji/tongji",
+		"style": {
+			"navigationBarTitleText": "数据统计"
+		}
+	}, {
+		"path": "pages/message/message",
+		"style": {
+			"navigationBarTitleText": "消息"
+		}
+	}, {
+		"path": "pages/wode/wode",
+		"style": {
+			"navigationBarTitleText": "个人中心"
+		}
+	}],
 	"globalStyle": {
-		"navigationBarTextStyle": "black",
-		"navigationBarTitleText": "uni-app",
-		"navigationBarBackgroundColor": "#F8F8F8",
-		"backgroundColor": "#F8F8F8"
+		"navigationBarTextStyle": "white",
+		"navigationBarTitleText": "商户后台",
+		"navigationBarBackgroundColor": "#007AFF",
+		"backgroundColor": "#FFFFFF"
+	},
+	"tabBar": {
+		"color": "#7A7E83",
+		"selectedColor": "#007AFF",
+		"borderStyle": "black",
+		"backgroundColor": "#ffffff",
+		"list": [{
+			"pagePath": "pages/index/index",
+			"iconPath": "static/tabbar/index.png",
+			"selectedIconPath": "static/tabbar/indexactive.png",
+			"text": "首页"
+		}, {
+			"pagePath": "pages/tongji/tongji",
+			"iconPath": "static/tabbar/tongji.png",
+			"selectedIconPath": "static/tabbar/tongjiactive.png",
+			"text": "统计"
+		}, {
+			"pagePath": "pages/message/message",
+			"iconPath": "static/tabbar/tongzhi.png",
+			"selectedIconPath": "static/tabbar/tongzhiactive.png",
+			"text": "通知"
+		}, {
+			"pagePath": "pages/wode/wode",
+			"iconPath": "static/tabbar/wode.png",
+			"selectedIconPath": "static/tabbar/wodeactive.png",
+			"text": "我的"
+		}]
 	}
 }
