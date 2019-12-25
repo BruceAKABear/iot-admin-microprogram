@@ -22,11 +22,11 @@
 						<view class="login-use-usernamepassword">
 							<view class="login-use-usernamepassword-username">
 								<uni-icon type="phone" size="30" class=""></uni-icon>
-								<input type="number" v-model="username" value="" placeholder="请输入您的手机号" />
+								<input type="number" v-model="formUsernameAndPassword.username" value="" placeholder="请输入您的手机号" />
 							</view>
 							<view class="login-use-usernamepassword-password">
 								<uni-icon type="locked" size="30"></uni-icon>
-								<input type="password" v-model="password" placeholder="请输入您的密码" />
+								<input type="password" v-model="formUsernameAndPassword.password" placeholder="请输入您的密码" />
 							</view>
 							<view class="login-use-usernamepassword-button">
 								<button type="primary" @tap="doUsernamePasswordLogin">登录</button>
@@ -68,6 +68,13 @@
 	import UniIcon from "@/components/uni-icons/uni-icons.vue"
 	import WucTab from '@/components/wuc-tab/wuc-tab.vue'
 	import JoinUs from '../../components/join-us/join-us.vue'
+	import {
+		hex_md5
+	} from '../../utils/index.js'
+	import {
+		mapState,
+		mapMutations
+	} from 'vuex'
 	export default {
 		data() {
 			return {
@@ -79,6 +86,7 @@
 				}, {
 					name: '手机验证码登录'
 				}],
+				formUsernameAndPassword: {},
 				username: '',
 				password: '',
 				phoneNumber: '',
@@ -99,24 +107,76 @@
 			UniIcon
 		},
 		methods: {
+			...mapMutations(['setAccountInfo', 'setDeviceInfo']),
 			//监听swiper改变修改tab
 			swiperChange(e) {
 				this.tabNumber = e.detail.current
 			},
 			//用户名密码登录
-			doUsernamePasswordLogin() {
-				if (this.phoneUmber === '' || this.password === '') {
-					uni.showModal({
-						title: '',
-						content: '请将信息填写完整后登录',
-						showCancel: false,
-						success: function(res) {
-							if (res.confirm) {
-								console.log('用户点击确定');
-							}
-						}
+			async doUsernamePasswordLogin() {
+				if (this.formUsernameAndPassword.username === '' || this.formUsernameAndPassword.password === '') {
+					uni.showToast({
+						title: '请将信息填写完整',
+						icon: 'none',
+						mask: true,
+						duration: 1500
 					})
 				} else {
+					if (!(/^1[3456789]\d{9}$/.test(this.formUsernameAndPassword.username))) {
+						uni.showToast({
+							title: '手机号码格式错误',
+							icon: 'none',
+							mask: true,
+							duration: 1500
+						})
+					} else {
+						let encrPass = hex_md5(this.formUsernameAndPassword.password)
+						this.formUsernameAndPassword.password = encrPass
+						let res = await this.$api.login(this.formUsernameAndPassword)
+						if (res.data.success) {
+							let realdata = res.data.data
+							let accountInfo = {}
+							accountInfo.id = realdata.userInfo.id
+							accountInfo.phoneNumber = realdata.userInfo.mobile
+							accountInfo.name = realdata.userInfo.nickname
+							this.setAccountInfo(accountInfo)
+							let timeNow = new Date().getTime()
+							//查询设备信息
+							let params = {}
+							params.mctId = realdata.brandInfo.mct.id
+							params.startTime = timeNow
+							params.endTime = timeNow
+							let resNum = await this.$api.countDeviceNumber(params)
+							if (resNum.data.success) {
+								let deviceInfo = {}
+								deviceInfo.devicesNumber = resNum.data.data.deviceCount.totalCount
+								deviceInfo.onlineDevicesNumber = resNum.data.data.deviceCount.totalOnline
+								deviceInfo.needReplenishDevicesNumber = resNum.data.data.deviceCount.totalOnline
+								this.setDeviceInfo(deviceInfo)
+								console.log('this的指向是', this)
+							}
+
+							uni.showToast({
+								title: '登录成功',
+								icon: 'success',
+								mask: true,
+								duration: 2000,
+								success() {
+									uni.reLaunch({
+										url: '../index/index'
+									})
+								}
+							})
+						} else {
+							uni.showToast({
+								title: res.data.msg,
+								icon: 'none',
+								mask: true,
+								duration: 1500
+							})
+						}
+
+					}
 
 
 				}
@@ -131,11 +191,11 @@
 						title: '验证码已发送',
 						mask: true,
 						duration: 1500
-					});
+					})
 				} else {
 					uni.showToast({
 						title: '手机号不正确',
-						icon:'none',
+						icon: 'none',
 						mask: true,
 						duration: 1500
 					});

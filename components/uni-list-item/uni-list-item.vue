@@ -135,6 +135,7 @@
 		position: relative;
 		flex-direction: column;
 		justify-content: space-between;
+		align-items: center;
 		padding-left: $uni-spacing-row-lg;
 	}
 

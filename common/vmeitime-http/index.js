@@ -1,38 +1,37 @@
 import http from './interface'
-export const test = (data) => {
-	/* http.config.baseUrl = "http://localhost:8080/api/"
-	//设置请求前拦截器
-	http.interceptor.request = (config) => {
+
+//设置请求地址
+http.config.baseUrl = "http://admin.ayilink.com/api/admin/"
+
+//设置请求前拦截器
+http.interceptor.request = (config) => {
+	const tokenStorage = uni.getStorageSync('Authorization');
+	if (tokenStorage && tokenStorage != '') {
 		config.header = {
-			"token": "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"
+			"Authorization": tokenStorage
 		}
-	} */
+	}
+}
+
+
+//登录
+const loginPath = 'login'
+const countDeviceNumberPath = 'stat/deviceCount'
+export const login = (data) => {
 	//设置请求结束后拦截器
 	http.interceptor.response = (response) => {
-		console.log('个性化response....')
-		//判断返回状态 执行相应操作
+		if (response.data.success) {
+			uni.setStorageSync('Authorization', response.data.data.token)
+		}
 		return response;
 	}
-    return http.request({
-		baseUrl: 'https://unidemo.dcloud.net.cn/',
-        url: 'ajax/echo/text?name=uni-app',
-		dataType: 'text',
-        data,
-    })
+	return http.post(loginPath, data)
 }
-
-// 轮播图
-export const banner = (data) => {
-    return http.request({
-        url: '/banner/36kr',
-        method: 'GET', 
-        data,
-		// handle:true
-    })
+export const countDeviceNumber = (data) => {
+	return http.get(countDeviceNumberPath, data)
 }
-
 // 默认全部导出  import api from '@/common/vmeitime-http/'
 export default {
-	test,
-    banner
+	login,
+	countDeviceNumber
 }

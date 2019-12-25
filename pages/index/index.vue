@@ -45,7 +45,7 @@
 							设备总数
 						</view>
 						<view class="card-info-number">
-							11
+							{{deviceInfo.devicesNumber}}
 						</view>
 					</view>
 				</view>
@@ -57,7 +57,7 @@
 							设备在线数
 						</view>
 						<view class="card-info-number">
-							11
+							{{deviceInfo.onlineDevicesNumber}}
 						</view>
 					</view>
 				</view>
@@ -69,7 +69,7 @@
 							缺货设备数
 						</view>
 						<view class="card-info-number">
-							11
+							{{deviceInfo.needReplenishDevicesNumber}}
 						</view>
 					</view>
 				</view>
@@ -151,6 +151,9 @@
 	import UniIcon from "@/components/uni-icons/uni-icons.vue"
 	import WucTab from '@/components/wuc-tab/wuc-tab.vue'
 	import uniNoticeBar from '@/components/uni-notice-bar/uni-notice-bar.vue'
+	import {
+		mapState
+	} from "vuex"
 	export default {
 		data() {
 			return {
@@ -202,6 +205,9 @@
 						break
 				}
 			}
+		},
+		computed: {
+			...mapState(['deviceInfo'])
 		}
 	}
 </script>
@@ -306,7 +312,7 @@
 		padding: 10rpx;
 		margin-top: 10rpx;
 		margin-bottom: 10rpx;
-		border-bottom: solid 1rpx #DDDDDD ;
+		border-bottom: solid 1rpx #DDDDDD;
 	}
 
 	.index-bottom {
