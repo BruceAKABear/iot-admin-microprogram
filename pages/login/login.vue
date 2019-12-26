@@ -3,7 +3,6 @@
 	<view class="login-container">
 		<!-- 登录容器头部 -->
 		<view class="login-header">
-			<image src="../../static/loginhed.png" mode=""></image>
 			<!-- 登录页面头部logo -->
 			<view class="login-header-logo">
 
@@ -13,39 +12,39 @@
 		<view class="login-body">
 			<!-- tab组件 -->
 			<view class="login-body-header">
-				<wuc-tab :tab-list="tabNameList" :tabCur.sync="tabNumber"></wuc-tab>
+				<wuc-tab :tab-list="tabNameList" :tabCur="tabNumber" @change="handleTabChange"></wuc-tab>
 			</view>
 			<!-- swiper -->
 			<view class="login-body-main">
 				<swiper :current="tabNumber" duration="200" @change="swiperChange">
 					<swiper-item>
-						<view class="login-use-usernamepassword">
-							<view class="login-use-usernamepassword-username">
-								<uni-icon type="phone" size="30" class=""></uni-icon>
+						<view class="login-use-usernamepassword ">
+							<view class="login-use-usernamepassword-username ">
+								<text class="lg text-gray cuIcon-mobile"></text>
 								<input type="number" v-model="formUsernameAndPassword.username" value="" placeholder="请输入您的手机号" />
 							</view>
-							<view class="login-use-usernamepassword-password">
-								<uni-icon type="locked" size="30"></uni-icon>
+							<view class="login-use-usernamepassword-password ">
+								<text class="lg text-gray cuIcon-lock"></text>
 								<input type="password" v-model="formUsernameAndPassword.password" placeholder="请输入您的密码" />
 							</view>
-							<view class="login-use-usernamepassword-button">
-								<button type="primary" @tap="doUsernamePasswordLogin">登录</button>
+							<view class="login-use-usernamepassword-button  flex flex-direction">
+								<button class="cu-btn bg-blue lg" @tap="doUsernamePasswordLogin">登录</button>
 							</view>
 						</view>
 					</swiper-item>
 					<swiper-item>
 						<view class="login-use-phonenumber">
-							<view class="login-use-phonenumber-phonenumber">
-								<uni-icon type="phone" size="40"></uni-icon>
+							<view class="login-use-phonenumber-phonenumber ">
+								<text class="lg text-gray cuIcon-mobile"></text>
 								<input type="number" v-model="phoneNumber" value="" placeholder="请输入您的手机号" />
 								<button size="mini" type="primary" @tap="getValidCode" :disabled="!canGetValidCode">获取验证码</button>
 							</view>
-							<view class="login-use-phonenumber-validcode">
-								<uni-icon type="locked" size="40"></uni-icon>
+							<view class="login-use-phonenumber-validcode ">
+								<text class="lg text-gray cuIcon-lock"></text>
 								<input type="number" v-model="validcode" placeholder="请输入验证码" />
 							</view>
-							<view class="login-use-phonenumber-button">
-								<button class="button-hover" @tap="doPhoneValidCodeLogin">登录</button>
+							<view class="login-use-phonenumber-button  flex flex-direction">
+								<button class="cu-btn bg-blue lg" @tap="doPhoneValidCodeLogin">登录</button>
 							</view>
 
 						</view>
@@ -108,6 +107,14 @@
 		},
 		methods: {
 			...mapMutations(['setAccountInfo', 'setDeviceInfo']),
+			handleTabChange(e) {
+				if (this.tabNumber == e) {
+					return
+				} else {
+					console.log(e)
+					this.tabNumber = e
+				}
+			},
 			//监听swiper改变修改tab
 			swiperChange(e) {
 				this.tabNumber = e.detail.current
@@ -153,7 +160,6 @@
 								deviceInfo.onlineDevicesNumber = resNum.data.data.deviceCount.totalOnline
 								deviceInfo.needReplenishDevicesNumber = resNum.data.data.deviceCount.totalOnline
 								this.setDeviceInfo(deviceInfo)
-								console.log('this的指向是', this)
 							}
 
 							uni.showToast({
@@ -234,6 +240,8 @@
 <style lang="scss" scoped>
 	.login-header {
 		width: 100%;
+		height: 400rpx;
+		background-color: #007AFF;
 
 		image {
 			width: 100%;
@@ -241,8 +249,11 @@
 	}
 
 	.login-body {
-		margin-top: 50rpx;
-		font-size: 28rpx;
+		position: absolute;
+		left: 50%;
+		transform: translate(-50%);
+		font-size: 30rpx;
+
 
 		.login-body-header {
 			display: flex;
@@ -258,6 +269,9 @@
 				position: absolute;
 				left: 50%;
 				transform: translate(-50%);
+				swiper-item {
+					height: 400rpx;
+				}
 			}
 
 			.login-use-usernamepassword {
@@ -271,6 +285,10 @@
 					input {
 						margin-left: 20rpx;
 					}
+
+					text {
+						font-size: 40rpx;
+					}
 				}
 
 				.login-use-usernamepassword-password {
@@ -283,10 +301,15 @@
 					input {
 						margin-left: 20rpx;
 					}
+
+					text {
+						font-size: 40rpx;
+					}
 				}
 
 				.login-use-usernamepassword-button {
 					margin-top: 60rpx;
+
 				}
 			}
 
@@ -305,6 +328,10 @@
 					button {
 						margin-right: 0;
 					}
+
+					text {
+						font-size: 40rpx;
+					}
 				}
 
 				.login-use-phonenumber-validcode {
@@ -316,6 +343,10 @@
 
 					input {
 						margin-left: 20rpx;
+					}
+
+					text {
+						font-size: 40rpx;
 					}
 				}
 

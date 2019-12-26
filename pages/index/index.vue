@@ -179,6 +179,11 @@
 			uniNoticeBar
 		},
 		onLoad() {
+			//设置通知红点
+			uni.setTabBarBadge({
+			  index: 2,
+			  text: '1'
+			})
 
 		},
 		onPullDownRefresh() {

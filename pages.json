@@ -1,10 +1,5 @@
 {
-	"pages": [{
-			"path": "pages/login/login",
-			"style": {
-				"navigationBarTitleText": "管理后台登录"
-			}
-		},
+	"pages": [
 		{
 			"path": "pages/index/index",
 			"style": {
@@ -13,6 +8,12 @@
 				"enablePullDownRefresh": true
 			}
 		},
+		{
+				"path": "pages/login/login",
+				"style": {
+					"navigationBarTitleText": "管理后台登录"
+				}
+			},
 		{
 			"path": "pages/devicemanage/devicemanage",
 			"style": {}
